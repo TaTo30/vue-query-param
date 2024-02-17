@@ -1,0 +1,1 @@
+export { default as vQueryParam } from "./v-query-param"
