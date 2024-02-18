@@ -1,21 +1,17 @@
+function updateHistory(urlsearch: URLSearchParams) {
+  const prefix = urlsearch.size > 0? "?" : ""
+  const searchpath = `${prefix}${urlsearch.toString()}`  
+  history.replaceState(null, '', `${location.pathname}${searchpath}`)
+}
 
-
-function removeKey(key:string) {
+function removeKey(key: string) {
   const urlsearch = new URLSearchParams(location.search)
   urlsearch.delete(key)
-
-  let npathname
-  if (location.pathname.includes('?')) {
-    npathname = location.pathname.replace(/\?(.)*/, `?${urlsearch.toString()}`)
-  } else {
-    npathname = `?${urlsearch.toString()}`
-  }
-  history.replaceState(null, '', npathname)
+  updateHistory(urlsearch)
 }
 
 function setValueToURL(key:string, value:string){
   const urlsearch = new URLSearchParams(location.search)
-
   if (!value)
     return removeKey(key)
   
@@ -24,13 +20,7 @@ function setValueToURL(key:string, value:string){
   else 
     urlsearch.append(key, value)
   
-  let npathname
-  if (location.pathname.includes("?")) {
-    npathname = location.pathname.replace(/\?(.)*/, `?${urlsearch.toString()}`)
-  } else {
-    npathname = `?${urlsearch.toString()}`
-  }
-  history.replaceState(null, '', npathname)
+  updateHistory(urlsearch)
 }
 
 function getValueFromURL(key: string) {
