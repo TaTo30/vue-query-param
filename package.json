@@ -1,6 +1,6 @@
 {
   "name": "vue-query-param",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Vue directive for bind a model with a URL's query param",
   "author": {
     "name": "Aldo Hernandez",
