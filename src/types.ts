@@ -1,5 +1,3 @@
-import { VueElement } from "vue"
-
 export interface QueryParamArgs {
   model: string
   callback: Function | null
@@ -7,10 +5,10 @@ export interface QueryParamArgs {
 }
 
 export interface Binding {
-  value: Function | QueryParamArgs
-  oldValue: Function | QueryParamArgs
+  value: string | QueryParamArgs
+  oldValue: string | QueryParamArgs
   arg: string
   modifiers: object
-  instance: VueElement
+  instance: object
   dir: object
 } 

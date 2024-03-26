@@ -1,18 +1,20 @@
 import { getValueFromURL, setValueToURL } from "./history";
-
 import type { Binding, QueryParamArgs } from "../types";
 
-const defaultArgs = {
-  model: "",
-  callback: null,
-  format: (val: object) => `${val}`,
-}
-
 function getArgs(el: HTMLElement, binding: Binding): QueryParamArgs {
-  if (typeof binding.value === 'string') {
+  const defaultArgs = {
+    model: "",
+    callback: null,
+    format: (val: object) => val,
+  }
+  if (typeof binding.value !== 'object') {
      return Object.assign(defaultArgs, {model: binding.value})
   } else {
-    return Object.assign({}, defaultArgs, binding.value)
+    if ("model" in binding.value) {
+      return Object.assign(defaultArgs, binding.value)
+    } else {
+      return Object.assign(defaultArgs, { model: binding.value })
+    }
   }
 }
 
@@ -25,8 +27,8 @@ const vQueryParam = {
       args.callback(getValueFromURL(binding.arg))
     }
   },
-  updated(el: HTMLElement, binding: Binding) {
-    const args = getArgs(el, binding)
+  updated(el: HTMLElement, binding: Binding) {    
+    const args = getArgs(el, binding)    
     setValueToURL(binding.arg, args.format(args.model))
   },
   mounted(el: HTMLElement, binding: Binding) { 
