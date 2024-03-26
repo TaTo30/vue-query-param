@@ -1,7 +1,7 @@
 function updateHistory(urlsearch: URLSearchParams) {
-  const prefix = urlsearch.size > 0? "?" : ""
-  const searchpath = `${prefix}${urlsearch.toString()}`  
-  history.replaceState(null, '', `${location.pathname}${searchpath}`)
+  const newUrl = new URL(location.href)
+  newUrl.search = urlsearch.toString()
+  history.replaceState(null, '', newUrl)
 }
 
 function removeKey(key: string) {

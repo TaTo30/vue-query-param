@@ -7,7 +7,6 @@ import '@vuepic/vue-datepicker/dist/main.css'
 const date = ref()
 const search = ref(0)
 const selectmodel = ref("")
-
 </script>
 
 <template>
@@ -21,8 +20,8 @@ const selectmodel = ref("")
   <div>
     <VueDatePicker v-query-param:datefrom="{
       model: date,
-      format: (val: Date) => val.toLocaleDateString(),
-      callback: (val: string) => date = new Date(val)
+      format: (val: Date) => val?.toLocaleDateString(),
+      callback: (val: string) => date = val? new Date(val) : null
     }" v-model="date"/> 
   </div>
 </template>

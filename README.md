@@ -1,46 +1,100 @@
 # vue-query-param
 
-This template should help get you started developing with Vue 3 in Vite.
+## Introduction
 
-## Recommended IDE Setup
+`vue-query-param` is a vue directive that binds and syncs a `ref` model to the URL's query paramaters.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Installation
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```console
+npm i vue-query-param
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
+```console
+yarn add vue-query-param
 ```
 
-### Type-Check, Compile and Minify for Production
+## Basic Usage
 
-```sh
-npm run build
+```vue
+<script setup lang="ts">
+import { vQueryParam } from "vue-query-param";
+
+const filter = ref("")
+</script>
+
+<template>
+  <input v-model="filter" v-query-param:filter="filter" />
+</template>
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## Hook Arguments
 
-```sh
-npm run lint
+### Directive argument
+
+`arg` must be the *key* of the model in the URL, for example, this code:
+```vue
+<input v-model="search" v-query-param:q="search" />
+<input v-model="filter" v-query-param:filter="filter" />
+```
+Will produce this URL `https://<domain>/<subpath>/?q=<value>&filter=<value>`
+
+### Directive value
+
+In the most basic cases you only need to use a `ref` directly in the directive value but for more complex cases you can use an object with the following options:
+
+```js
+{
+    model: ref_property,
+    format: (val) => val.toString(),
+    callback: (val) => ref_property = val
+}
+```
+
+#### model
+
+The `ref` field that `v-query-param` will bind on the URL.
+
+#### format
+
+A `function` to format the model value, useful when the value is not a primitive type or just masking the value when is set in the URL.
+
+#### callback
+
+A `function` that is called during the `created` hook, use this if you want to set at your `ref` field the current URL value before mounting the template.
+
+## Examples 
+
+A common use case could be a search input, usually you want to store in URL the user's input, so when the page is reloaded you still have the user's input.
+
+```vue
+<script setup lang="ts">
+import { vQueryParam } from "vue-query-param";
+
+const search = ref("")
+</script>
+
+<template>
+  <input v-model="search" v-query-param:q="search" />
+</template>
+```
+
+For complex types as dates, you can use the `format` and `callback` options so you can store in URL the date in a specific format and retrieve it again during the `created` hook by parsing the formatted value.
+
+```vue
+<script setup lang="ts">
+import { vQueryParam } from "vue-query-param";
+
+const date = ref()
+</script>
+
+<template>
+  <div>
+    <VueDatePicker v-query-param:datefrom="{
+      model: date,
+      format: (val: Date) => val.toLocaleDateString(),
+      callback: (val: string) => date = new Date(val)
+    }" v-model="date"/> 
+  </div>
+</template>
 ```
