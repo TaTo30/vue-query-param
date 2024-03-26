@@ -4,6 +4,9 @@
 
 `vue-query-param` is a vue directive that binds and syncs a `ref` model to the URL's query paramaters.
 
+![vue-query-param(2)](https://github.com/TaTo30/vue-query-param/assets/57086025/28d9babc-90c0-4dad-a858-9c6c32345887)
+
+
 ## Installation
 
 ```console
